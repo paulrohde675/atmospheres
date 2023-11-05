@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "atmospheres"
+version = "0.1.0"
+description = ""
+authors = ["Paul Rohde <paulrohde675@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+gensim = "^4.3.2"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.26.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
