@@ -21,23 +21,20 @@ client = OpenAI(
   api_key=os.environ['OPENAI_API_KEY'],  # this is also the default, it can be omitted
 )
 
-prompt = f"""I am performing an sentiment analyse. Please Evaluate the following statement from a job portal in kontext 
-a feel-good atmosphere:
-{data['working_atmosphere_comment'][0]}
-
-return  a list of the general topic, a short summary, a one word summary and a boolean if the statement is positve or not.
-[topic, short_sumary, one_word_summary, positve]
-"""
-
-completion = client.chat.completions.create(
-    model="gpt-3.5-turbo-0613",
-    messages=[
+completion = client.completions.create(
+    model="gpt-3.5-turbo",
+    prompt=[
+       {"role": "user", "content": data['working_atmosphere_comment'][0]}
+    ],
+    functions=[
         {
-            "role": "user",
-            "content": prompt,
+          "name": "summarize_job_portal_rating",
+          "description": "Summarize the job portal rating with a general topic, a short summary, a one word summary and a positive or negative sentiment",
+          "parameters": StepByStepAIResponse.schema()
         }
     ],
+    function_call={"name": "summarize_job_portal_rating"}
 )
 
-output = json.loads(completion.choices[0]["message"])
+output = json.loads(completion.choices[0]["message"]["function_call"]["arguments"])
 print(output)
